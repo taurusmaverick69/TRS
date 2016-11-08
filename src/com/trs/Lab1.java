@@ -36,7 +36,7 @@ public class Lab1 {
         image.setData(raster);
     }
 
-    private static Double[] getMatrix(WritableRaster raster, int x, int y) {
+    private static synchronized Double[] getMatrix(WritableRaster raster, int x, int y) {
         ArrayList<Double[]> list = new ArrayList<>();
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
