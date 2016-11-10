@@ -15,13 +15,14 @@ public class PZ2 {
     }
 
     public static void batcherSort(int[] arr) {
-        int p = arr.length;
-        while (p > 0) {
+
+        for (int p = arr.length; p > 0; p >>= 1) {
+
             int q = arr.length, r = 0, d = p;
             boolean b;
             do {
                 int nTo = arr.length - d;
-                for (int i = 0; i < nTo; i++)
+                for (int i = 0; i < nTo; i++) {
                     if ((i & p) == r) {
                         if (arr[i] > arr[i + d]) {
                             int temp = arr[i];
@@ -29,6 +30,8 @@ public class PZ2 {
                             arr[i + d] = temp;
                         }
                     }
+                }
+
                 b = q != p;
                 if (b) {
                     d = q - p;
@@ -36,8 +39,9 @@ public class PZ2 {
                     r = p;
                 }
             } while (b);
-            p >>= 1;
         }
+
+
     }
 
     public static void bubbleSort(int[] arr) {
@@ -62,47 +66,46 @@ public class PZ2 {
 
     public static void main(String[] args) {
 
-        int[] singleArr = new int[LENGTH];
-        int[] multipleArr = new int[LENGTH];
+        int[] batcherSingleArr = new int[LENGTH];
+        int[] bubbleSingleArr = new int[LENGTH];
+        int[] batcherMultipleArr = new int[LENGTH];
+        int[] bubbleMultipleArr = new int[LENGTH];
 
-        fillArray(singleArr);
+        fillArray(batcherSingleArr);
 
-        System.arraycopy(singleArr, 0, multipleArr, 0, singleArr.length);
+        System.arraycopy(batcherSingleArr, 0, bubbleSingleArr, 0, batcherSingleArr.length);
+        System.arraycopy(batcherSingleArr, 0, batcherMultipleArr, 0, batcherSingleArr.length);
+        System.arraycopy(batcherSingleArr, 0, bubbleMultipleArr, 0, batcherSingleArr.length);
 
-
-//        System.out.println(Arrays.toString(singleArr));
-//        System.out.println(Arrays.toString(multipleArr));
+        System.out.println(Arrays.toString(batcherSingleArr));
+        System.out.println(Arrays.toString(bubbleSingleArr));
+        System.out.println(Arrays.toString(batcherMultipleArr));
+        System.out.println(Arrays.toString(bubbleMultipleArr));
 
         long before = System.nanoTime();
-        batcherSort(singleArr);
-        System.out.println("Single thread = " + (System.nanoTime() - before));
+        batcherSort(batcherSingleArr);
+        System.out.println("Batcher single thread = " + (System.nanoTime() - before));
 
         before = System.nanoTime();
-        bubbleSort(multipleArr);
-        System.out.println("Bubble thread = " + (System.nanoTime() - before));
+        bubbleSort(bubbleSingleArr);
+        System.out.println("Bubble single thread = " + (System.nanoTime() - before));
+
+        System.out.println(Arrays.toString(batcherSingleArr));
+        System.out.println(Arrays.toString(bubbleSingleArr));
 
 
-//        System.out.println(Arrays.toString(singleArr));
-//        System.out.println(Arrays.toString(multipleArr));
+        Thread[] threads = new Thread[4];
+        before = System.nanoTime();
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() -> {
+                batcherSort(batcherMultipleArr);
+            });
+            threads[i].start();
+        }
+        System.out.println("Batcher multiple thread = " + (System.nanoTime() - before));
 
+        System.out.println(Arrays.toString(batcherMultipleArr));
 
-//        long before = System.currentTimeMillis();
-//        batcherSort(singleArr);
-//        System.out.println("Single thread = " + (System.currentTimeMillis() - before));
-//
-//
-//        Thread[] threads = new Thread[4];
-//        before = System.currentTimeMillis();
-//        for (int i = 0; i < threads.length; i++) {
-//            threads[i] = new Thread(() -> {
-//                batcherSort(multipleArr);
-//            });
-//            threads[i].start();
-//        }
-//        System.out.println("Multiple thread = " + (System.currentTimeMillis() - before));
-//
-//        System.out.println(Arrays.toString(singleArr));
-//        System.out.println(Arrays.toString(multipleArr));
 
     }
 
