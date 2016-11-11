@@ -16,6 +16,8 @@ public class PZ2 {
 
     public static void batcherSort(int[] arr) {
 
+        long before = System.nanoTime();
+
         for (int p = arr.length; p > 0; p >>= 1) {
 
             int q = arr.length, r = 0, d = p;
@@ -40,11 +42,13 @@ public class PZ2 {
                 }
             } while (b);
         }
-
-
+        System.out.println("Batcher time = " + (System.nanoTime() - before));
     }
 
     public static void bubbleSort(int[] arr) {
+
+        long before = System.nanoTime();
+
         int j;
         boolean flag = true;   // set flag to true to begin first pass
         int temp;   //holding variable
@@ -61,10 +65,10 @@ public class PZ2 {
                 }
             }
         }
+        System.out.println("Bubble time = " + (System.nanoTime() - before));
     }
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         int[] batcherSingleArr = new int[LENGTH];
         int[] bubbleSingleArr = new int[LENGTH];
@@ -77,35 +81,40 @@ public class PZ2 {
         System.arraycopy(batcherSingleArr, 0, batcherMultipleArr, 0, batcherSingleArr.length);
         System.arraycopy(batcherSingleArr, 0, bubbleMultipleArr, 0, batcherSingleArr.length);
 
-        System.out.println(Arrays.toString(batcherSingleArr));
-        System.out.println(Arrays.toString(bubbleSingleArr));
-        System.out.println(Arrays.toString(batcherMultipleArr));
-        System.out.println(Arrays.toString(bubbleMultipleArr));
+        System.out.println("Batcher single thread initial array: " + Arrays.toString(batcherSingleArr));
+        System.out.println("Bubble single thread initial array: " + Arrays.toString(bubbleSingleArr));
+        System.out.println("Batcher multiple thread initial array: " + Arrays.toString(batcherMultipleArr));
+        System.out.println("Batcher multiple thread initial array: " + Arrays.toString(bubbleMultipleArr));
 
-        long before = System.nanoTime();
+        System.out.println("\n***SINGLE THREAD***");
+
         batcherSort(batcherSingleArr);
-        System.out.println("Batcher single thread = " + (System.nanoTime() - before));
-
-        before = System.nanoTime();
         bubbleSort(bubbleSingleArr);
-        System.out.println("Bubble single thread = " + (System.nanoTime() - before));
 
-        System.out.println(Arrays.toString(batcherSingleArr));
-        System.out.println(Arrays.toString(bubbleSingleArr));
+        System.out.println("Batcher single thread sorted array: " + Arrays.toString(batcherSingleArr));
+        System.out.println("Bubble single thread sorted array: " + Arrays.toString(bubbleSingleArr));
 
+        System.out.println(System.lineSeparator() + "***MULTIPLE THREAD***");
 
-        Thread[] threads = new Thread[4];
-        before = System.nanoTime();
-        for (int i = 0; i < threads.length; i++) {
-            threads[i] = new Thread(() -> {
+        Thread[] batcherThreads = new Thread[4];
+        for (int i = 0; i < batcherThreads.length; i++) {
+            batcherThreads[i] = new Thread(() -> {
                 batcherSort(batcherMultipleArr);
             });
-            threads[i].start();
+            batcherThreads[i].start();
+            batcherThreads[i].join();
         }
-        System.out.println("Batcher multiple thread = " + (System.nanoTime() - before));
+        System.out.println("Batcher multiple thread sorted array: " + Arrays.toString(batcherMultipleArr) + System.lineSeparator());
 
-        System.out.println(Arrays.toString(batcherMultipleArr));
-
+        Thread[] bubbleThreads = new Thread[4];
+        for (int i = 0; i < bubbleThreads.length; i++) {
+            bubbleThreads[i] = new Thread(() -> {
+                bubbleSort(bubbleMultipleArr);
+            });
+            bubbleThreads[i].start();
+            bubbleThreads[i].join();
+        }
+        System.out.println("Bubble multiple thread sorted array: " + Arrays.toString(bubbleMultipleArr));
 
     }
 
