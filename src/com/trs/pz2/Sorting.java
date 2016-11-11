@@ -1,15 +1,15 @@
-package com.trs;
+package com.trs.pz2;
 
 import java.util.Arrays;
 import java.util.Random;
 
-public class PZ2 {
+public class Sorting {
 
-    private final static int LENGTH = (int) Math.pow(2, 10);
+    private final static int LENGTH = (int) Math.pow(2, 4);
 
     private static void fillArray(int arr[]) {
         Random random = new Random();
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++){
             arr[i] = random.nextInt(20);
         }
     }
