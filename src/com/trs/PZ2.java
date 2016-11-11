@@ -5,16 +5,16 @@ import java.util.Random;
 
 public class PZ2 {
 
-    private final static int LENGTH = (int) Math.pow(2, 4);
+    private final static int LENGTH = (int) Math.pow(2, 10);
 
-    public static void fillArray(int arr[]) {
+    private static void fillArray(int arr[]) {
         Random random = new Random();
         for (int i = 0; i < arr.length; i++) {
             arr[i] = random.nextInt(20);
         }
     }
 
-    public static void batcherSort(int[] arr) {
+    private static void batcherSort(int[] arr) {
 
         long before = System.nanoTime();
 
@@ -45,23 +45,22 @@ public class PZ2 {
         System.out.println("Batcher time = " + (System.nanoTime() - before));
     }
 
-    public static void bubbleSort(int[] arr) {
+    private static void bubbleSort(int[] arr) {
 
         long before = System.nanoTime();
 
         int j;
-        boolean flag = true;   // set flag to true to begin first pass
-        int temp;   //holding variable
+        boolean flag = true;
+        int temp;
 
         while (flag) {
-            flag = false;    //set flag to false awaiting a possible swap
+            flag = false;
             for (j = 0; j < arr.length - 1; j++) {
-                if (arr[j] > arr[j + 1])   // change to > for ascending sort
-                {
-                    temp = arr[j];                //swap elements
+                if (arr[j] > arr[j + 1]) {
+                    temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                    flag = true;              //shows a swap occurred
+                    flag = true;
                 }
             }
         }
@@ -86,7 +85,7 @@ public class PZ2 {
         System.out.println("Batcher multiple thread initial array: " + Arrays.toString(batcherMultipleArr));
         System.out.println("Batcher multiple thread initial array: " + Arrays.toString(bubbleMultipleArr));
 
-        System.out.println("\n***SINGLE THREAD***");
+        System.out.println(System.lineSeparator() + "***SINGLE THREAD***");
 
         batcherSort(batcherSingleArr);
         bubbleSort(bubbleSingleArr);
@@ -115,14 +114,5 @@ public class PZ2 {
             bubbleThreads[i].join();
         }
         System.out.println("Bubble multiple thread sorted array: " + Arrays.toString(bubbleMultipleArr));
-
     }
-
 }
-
-
-
-
-
-
-
